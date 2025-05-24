@@ -36,17 +36,28 @@ app.post("/upload", async (req, res, next) => {
     }
 
     res.json({
-      fields: [fields.fname, fields.fname2],
+      field: fields,
       file: files.file[0].filepath,
     });
   });
 });
 
 // using multer to handle formdata
-const dir = path.join(process.cwd(), "uploads_2");
-const upload = multer({ dest: dir });
+const dir2 = path.join(process.cwd(), "upload_2");
+if (!fs.existsSync(dir2)) {
+  fs.mkdirSync(dir2);
+}
+const storage = multer.diskStorage({
+  destination: function (_req, _file, cb) {
+    cb(null, dir2);
+  },
+  filename: function (_req, file, cb) {
+    cb(null, `upload_${Date.now()}_${path.extname(file.originalname)}`);
+  },
+});
 
-app.post("/upload_mult", upload.single("file"), (req, res, next) => {
+const upload = multer({ storage: storage });
+app.post("/upload_mult", upload.single("file"), (req, res, _next) => {
   res.json({ filename: req.file.originalname, fildes: req.body });
 });
 
