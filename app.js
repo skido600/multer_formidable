@@ -1,14 +1,15 @@
 import express from "express";
 import multer from "multer";
-import dotenv from "dotenv";
+
 import logger from "./middleware/logger.js";
 import path from "path";
 import formidable from "formidable";
 import fs from "fs";
+
 const app = express();
+import { port, cloudinary } from "./config/config.js";
 app.use(express.json());
-dotenv.config();
-const port = process.env.PORT;
+app.use(express.urlencoded({ extended: true }));
 
 //using formidable to handle formdata by leo
 app.post("/upload", async (req, res, next) => {
@@ -21,6 +22,7 @@ app.post("/upload", async (req, res, next) => {
   //       await fs.mkdir(dir);
   //     }
   //   }
+
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
@@ -57,8 +59,35 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-app.post("/upload_mult", upload.single("file"), (req, res, _next) => {
-  res.json({ filename: req.file.originalname, fildes: req.body });
+app.post("/upload_mult", upload.single("file"), async (req, res, _next) => {
+  const { fname } = req.body;
+  const filepath = req.file.path;
+  try {
+    // const result = storage_cloud.uploader.upload(filepath, {
+    //   folder: "IMAGES_UPLOADS",
+    //   resource_type: "image",
+    // });
+    const result = await cloudinary.uploader.upload(filepath, {
+      folder: "image_upload",
+      resource_type: "image",
+    });
+    res.json({
+      uploaded: true,
+      message: "upload successfuly",
+      data: [fname, result.url],
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ uploaded: false, message: error.message });
+  } finally {
+    // fs.unlinkSync(filepath);
+    fs.unlink(filepath, (err) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log("delected succesfully");
+    });
+  }
 });
 
 app.listen(port, () => {

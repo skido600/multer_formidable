@@ -1,32 +1,41 @@
-# 🚀 Express File Upload Fiesta 🎉
+# 🚀 Express File Uploader 🖼️
 
-A modern Express.js project showcasing file upload techniques using both **Formidable** and **Multer** middleware. Perfect for learning and experimenting with different approaches! 📁✨
+A simple yet powerful Express.js application for handling file uploads using both `formidable` and `multer` middleware. This project showcases different approaches to file uploading, including integration with Cloudinary for cloud storage.
 
-## 🌟 Project Description
+## ✨ Features
 
-This project demonstrates how to handle file uploads in an Express.js application using two popular middleware libraries:
-- **Formidable**: A robust and versatile library for parsing form data, including file uploads.
-- **Multer**: A middleware for handling `multipart/form-data`, which is primarily used for uploading files.
-
-It provides clear examples and setup instructions to get you started quickly. Let's get those files uploading! 🚀
+- 📁 **Formidable Upload**: Handles form data and file uploads using the `formidable` library.
+- 💾 **Multer Upload**: Utilizes `multer` middleware for efficient file uploads.
+- ☁️ **Cloudinary Integration**: Uploads files to Cloudinary for cloud storage.
+- 🪓 **File Deletion**: Automatically deletes local files after uploading to Cloudinary.
+- 📝 **Logging**: Uses Pino logger for detailed server logging.
 
 ## 🛠️ Installation
 
-Get the project up and running locally with these simple steps:
+Get started by following these simple steps:
 
 - ⬇️ **Clone the Repository**:
   ```bash
-  git clone <repository-url>
+  git clone https://github.com/skido600/multer_formidable.git
   ```
+
 - 📦 **Install Dependencies**:
   ```bash
+  cd formidable_multer
   npm install
   ```
+
 - ⚙️ **Configure Environment Variables**:
-  Create a `.env` file in the root directory and add your port configuration:
-  ```
-  PORT=3000
-  ```
+
+  - Create a `.env` file in the root directory.
+  - Add your Cloudinary credentials:
+    ```
+    CLOUDINARY_CLOUD_NAME=your_cloud_name
+    CLOUDINARY_API_KEY=your_api_key
+    CLOUDINARY_API_SECRET=your_api_secret
+    PORT=3000
+    ```
+
 - 🚀 **Run the Application**:
   ```bash
   npm start
@@ -34,104 +43,73 @@ Get the project up and running locally with these simple steps:
 
 ## 💻 Usage
 
-### 📁 Formidable Example
+### Using Formidable
+
+1.  Send a `POST` request to `/upload` with a form containing a file field.
+2.  The server will save the file in the `upload_test` directory.
+3.  The response will include the file path.
+
+### Using Multer
+
+1.  Send a `POST` request to `/upload_mult` with a form containing a file field named `file` and any other necessary fields.
+2.  The server will:
+    - Save the file in the `upload_2` directory.
+    - Upload the file to Cloudinary.
+    - Delete the local file.
+3.  The response will include the Cloudinary URL.
 
 <details>
-<summary>Click to expand Formidable usage instructions</summary>
+<summary><b>Example Request using <code>curl</code></b></summary>
+<br>
 
-1.  **Endpoint**: `/upload`
-2.  **Method**: `POST`
-3.  **Form Data**:
-    -   Fields: `fname`, `fname2`
-    -   File: `file`
-4.  **Example using `curl`**:
+```bash
+curl -X POST -F "file=@/path/to/your/image.jpg" -F "fname=example_name" http://localhost:3000/upload_mult
+```
 
-    ```bash
-    curl -X POST -F "fname=John" -F "fname2=Doe" -F "file=@/path/to/your/file.txt" http://localhost:3000/upload
-    ```
-
-5.  **Response**:
-
-    ```json
-    {
-        "fields": ["John", "Doe"],
-        "file": "upload_test/your_uploaded_file"
-    }
-    ```
+Replace `/path/to/your/image.jpg` with the actual path to your image file.
 </details>
 
-### 📸 Multer Example
+## 🔑 Key Features
 
-<details>
-<summary>Click to expand Multer usage instructions</summary>
+- ✅ **Easy Setup**: Simple installation process with minimal configuration.
+- 🚀 **Efficient Uploads**: Utilizes `multer` for optimized file handling.
+- ☁️ **Cloud Integration**: Seamlessly integrates with Cloudinary for cloud storage.
+- 🗑️ **Automatic Cleanup**: Deletes local files after successful upload to Cloudinary.
+- 📝 **Detailed Logging**: Uses Pino logger for comprehensive server logging.
 
-1.  **Endpoint**: `/upload_mult`
-2.  **Method**: `POST`
-3.  **Form Data**:
-    -   Field: Any additional fields you need
-    -   File: `file`
-4.  **Example using `curl`**:
+## 🧰 Technologies Used
 
-    ```bash
-    curl -X POST -F "fildes=SomeValue" -F "file=@/path/to/your/image.jpg" http://localhost:3000/upload_mult
-    ```
-
-5.  **Response**:
-
-    ```json
-    {
-        "filename": "image.jpg",
-        "fildes": { "fildes": "SomeValue" }
-    }
-    ```
-</details>
-
-## ✨ Key Features
-
--   📁 **Formidable Integration**: Parses form data efficiently.
--   🚀 **Multer Integration**: Handles `multipart/form-data` seamlessly.
--   📝 **Middleware Logging**: Uses Pino logger for request logging.
--   💾 **File Storage**: Configurable directories for storing uploaded files.
--   🧪 **Example Endpoints**: Ready-to-use endpoints for testing.
-
-## ⚙️ Technologies Used
-
-| Technology    | Link                                       |
-| :------------ | :----------------------------------------- |
-| Express.js    | [https://expressjs.com/](https://expressjs.com/)      |
-| Multer        | [https://github.com/multer/multer](https://github.com/multer/multer)       |
-| Formidable    | [https://github.com/node-formidable/formidable](https://github.com/node-formidable/formidable)       |
-| Pino          | [https://getpino.io/](https://getpino.io/)        |
-| dotenv        | [https://www.npmjs.com/package/dotenv](https://www.npmjs.com/package/dotenv)        |
+| Technology   | Link                               |
+| :----------- | :--------------------------------- |
+| Express.js   | [https://expressjs.com/](https://expressjs.com/)   |
+| Multer       | [https://github.com/multer/multer](https://github.com/multer/multer)       |
+| Formidable   | [https://github.com/node-formidable/formidable](https://github.com/node-formidable/formidable)   |
+| Cloudinary   | [https://cloudinary.com/](https://cloudinary.com/)   |
+| Pino         | [https://getpino.io/](https://getpino.io/)         |
+| Dotenv       | [https://github.com/motdotla/dotenv](https://github.com/motdotla/dotenv)       |
 
 ## 🤝 Contributing
 
 Contributions are welcome! Here's how you can help:
 
--   🐛 **Report Bugs**: Submit detailed bug reports.
--   🛠️ **Suggest Improvements**: Propose enhancements and new features.
--   🧑‍💻 **Submit Pull Requests**: Contribute code fixes and improvements.
+- 🐞 **Report Bugs**: Submit detailed bug reports.
+- 🛠️ **Suggest Enhancements**: Share your ideas for new features and improvements.
+- 📝 **Submit Pull Requests**: Contribute code changes.
 
-Please follow these guidelines:
+Follow these guidelines when contributing:
 
--   📝 Use clear and concise commit messages.
--   🧪 Write tests for new features and bug fixes.
--   📖 Update documentation as needed.
+- 📜 **Code Style**: Adhere to the existing code style.
+- ✍️ **Commit Messages**: Write clear and concise commit messages.
+- 🧪 **Testing**: Ensure your changes are well-tested.
 
 ## 📜 License
 
-This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
-## 🧑 Author Info
+## 🧑‍💻 Author Info
 
--   **Leo** - [GitHub](https://github.com/your-github-username) | [Twitter](https://twitter.com/your-twitter-username)
-  
-## 🛡️ Badges
- 
-[![Express.js](https://img.shields.io/badge/Express.js-%23000000.svg?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com)
-[![Node.js](https://img.shields.io/badge/Node.js-%2343853D.svg?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
-[![npm](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)](https://www.npmjs.com/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-[![Awesome Badges](https://img.shields.io/badge/badges-awesome-green.svg)](https://shields.io/)
+- **Author**: Skido600
+  - GitHub: [Your GitHub Profile](/*Add Github link here*/)
+  - Twitter: [Your Twitter Profile](/*Add Twitter link here*/)
 
 [![Readme was generated by Dokugen](https://img.shields.io/badge/Readme%20was%20generated%20by-Dokugen-brightgreen)](https://www.npmjs.com/package/dokugen)
